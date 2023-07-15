@@ -4,8 +4,13 @@ import PropTypes from 'prop-types';
 import TableRowComponent from "../TableRowComponent/TableRowComponent";
 
 function TableComponent({ data }) {
-  const updatedData = data.map(currency => currency={ ...currency, isSelected: false });
-  const [tableData, setTableData] = useState(updatedData);
+  const [tableData, setTableData] = useState([]);
+
+  useEffect(() => {
+    const updatedData = data.map(currency => currency={ ...currency, isSelected: false });
+    setTableData(updatedData);
+  }, [data]);
+
 
   function sortSelected() {
     const selectedRows = tableData.filter((currency) => currency.isSelected);
