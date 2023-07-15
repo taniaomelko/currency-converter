@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Table } from 'evergreen-ui';
 import PropTypes from 'prop-types';
 import TableRowComponent from "../TableRowComponent/TableRowComponent";
@@ -12,8 +12,8 @@ function TableComponent({ data }) {
   {});
 
   const [currencies, setCurrencies] = useState(initialCurrenciesState);
-  const starredItems = data.filter((curr) => !!currencies[curr.cc]);
-  const unstarredItems = data.filter((curr) => !currencies[curr.cc]);
+  const starredItems = data.filter((curr) => !!currencies[curr.cc]).map((curr) => ({ ...curr, isSelected: true }));
+  const unstarredItems = data.filter((curr) => !currencies[curr.cc]).map((curr) => ({ ...curr, isSelected: false }));
 
   const toggleSelect = (currency) => {
     setCurrencies((prevCurrencies) => ({
