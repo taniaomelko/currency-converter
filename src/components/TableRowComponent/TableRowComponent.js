@@ -2,12 +2,23 @@ import React, { useState, useEffect } from "react";
 import { Table } from 'evergreen-ui';
 import PropTypes from 'prop-types';
 
-function TableRowComponent({ currency }) {
+function TableRowComponent({ currency, sortSelected, sortedTableData, setTableData }) {
 
-  const [currencyState, setcurrencyState] = useState(false);
+  const [currencyState, setCurrencyState] = useState(false);
+
+  useEffect(() => {
+    // setTableData(data);
+  });
+
 
   function iconClick() {
-    setcurrencyState((prevState) => !prevState);
+    setCurrencyState((prevState) => !prevState);
+    currency.isSelected = !currency.isSelected;
+
+    sortSelected();
+
+
+    console.log(currency);
   }
 
   return (
@@ -20,6 +31,8 @@ function TableRowComponent({ currency }) {
       <Table.TextCell>{currency.cc}</Table.TextCell>
       <Table.TextCell>{currency.txt}</Table.TextCell>
       <Table.TextCell>{parseFloat(currency.rate.toFixed(4))}</Table.TextCell>
+      <Table.TextCell>{currency.isSelected.toString()}</Table.TextCell>
+
     </Table.Row>
   );
 }

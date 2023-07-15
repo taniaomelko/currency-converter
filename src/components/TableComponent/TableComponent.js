@@ -4,16 +4,15 @@ import PropTypes from 'prop-types';
 import TableRowComponent from "../TableRowComponent/TableRowComponent";
 
 function TableComponent({ data }) {
-  const [tableData, setTableData] = useState(data);
+  const updatedData = data.map(currency => currency={ ...currency, isSelected: false });
+  const [tableData, setTableData] = useState(updatedData);
 
-  useEffect(() => {
-    setTableData(data);
-  }, [data]);
-
-
-  const selectedRows = tableData.filter((currency) => currency.isSelected);
-  const unselectedRows = tableData.filter((currency) => !currency.isSelected);
-  const sortedTableData = [...selectedRows, ...unselectedRows];
+  function sortSelected() {
+    const selectedRows = tableData.filter((currency) => currency.isSelected);
+    const unselectedRows = tableData.filter((currency) => !currency.isSelected);
+    const sortedTableData = [...selectedRows, ...unselectedRows];
+    setTableData(sortedTableData);
+  }
 
   return (
     <Table className="max-w-[1000px]">
@@ -22,10 +21,11 @@ function TableComponent({ data }) {
         <Table.TextHeaderCell>Code</Table.TextHeaderCell>
         <Table.TextHeaderCell>Currency</Table.TextHeaderCell>
         <Table.TextHeaderCell>Rate</Table.TextHeaderCell>
+        <Table.TextHeaderCell>isSelected</Table.TextHeaderCell>
       </Table.Head>
       <Table.Body>
-        {sortedTableData.map((currency, index) => (
-          <TableRowComponent key={index} currency={{ ...currency, isSelected: false }} sortedTableData={sortedTableData} setTableData={setTableData}></TableRowComponent>
+        {tableData.map((currency, index) => (
+          <TableRowComponent key={index} currency={currency} sortSelected={sortSelected} setTableData={setTableData}></TableRowComponent>
         ))}
       </Table.Body>
     </Table>
