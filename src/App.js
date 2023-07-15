@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from "react";
-
-// import { useQuery, useMutation } from 'react-query';
-import './dist/style.css';
-
 import { getData } from './api/api';
-
 import { Pane, Tablist, Tab } from 'evergreen-ui';
-
+import './dist/style.css';
 
 import InputComponent from "./components/InputComponent/InputComponent";
 import SelectComponent from "./components/SelectComponent/SelectComponent";
@@ -16,29 +11,29 @@ import BaseCurrencyComponent from "./components/BaseCurrencyComponent/BaseCurren
 
 function App() {
   const [data, setData] = useState([]);
+
   const [amount, setAmount] = useState('');
   const [currency1, setCurrency1] = useState(0);
   const [currency2, setCurrency2] = useState(0);
   const [currency1Rate, setCurrency1Rate] = useState(0);
   const [currency2Rate, setCurrency2Rate] = useState(0);
+
   const [baseCurrency, setbaseCurrency] = useState('UAH');
   const [convertedAmount, setConvertedAmount] = useState(0);
-
-  const [selectedIndex, setSelectedIndex] = useState(1);
-  const [tabs] = useState(['Converter', 'Currencies']);
-
   const [error, setError] = useState(false);
+
+  const [tabs] = useState(['Converter', 'Currencies']);
+  const [selectedIndex, setSelectedIndex] = useState(1);
 
   const convertCurrency = () => {
     if (amount.length) {
-      setError(false);
       const conversionRate = currency1Rate / currency2Rate || 0;
       const converted = amount * conversionRate;
-      
       setConvertedAmount(converted);
+      setError(false);
     } else {
-      setError(true);
       setConvertedAmount(0);
+      setError(true);
     }
   };
 

@@ -24,7 +24,7 @@ function TableComponent({ data }) {
 
   return (
     <Table className="max-w-[1000px]">
-      <Table.Head height={40}>
+      <Table.Head height={40} className="px-0">
         <Table.TextHeaderCell flexBasis={100} flexShrink={0} flexGrow={0}></Table.TextHeaderCell>
         <Table.TextHeaderCell>Code</Table.TextHeaderCell>
         <Table.TextHeaderCell>Currency</Table.TextHeaderCell>
