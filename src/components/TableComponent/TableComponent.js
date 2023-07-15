@@ -4,20 +4,23 @@ import PropTypes from 'prop-types';
 import TableRowComponent from "../TableRowComponent/TableRowComponent";
 
 function TableComponent({ data }) {
-  const [tableData, setTableData] = useState([]);
+  const initialCurrenciesState = data.reduce(
+    (acc, currency) => ({
+      ...acc,
+      [currency.cc]: currency.isSelected,
+    }),
+  {});
 
-  useEffect(() => {
-    const updatedData = data.map(currency => currency={ ...currency, isSelected: false });
-    setTableData(updatedData);
-  }, [data]);
+  const [currencies, setCurrencies] = useState(initialCurrenciesState);
+  const starredItems = data.filter((curr) => !!currencies[curr.cc]);
+  const unstarredItems = data.filter((curr) => !currencies[curr.cc]);
 
-
-  function sortSelected() {
-    const selectedRows = tableData.filter((currency) => currency.isSelected);
-    const unselectedRows = tableData.filter((currency) => !currency.isSelected);
-    const sortedTableData = [...selectedRows, ...unselectedRows];
-    setTableData(sortedTableData);
-  }
+  const toggleSelect = (currency) => {
+    setCurrencies((prevCurrencies) => ({
+      ...prevCurrencies,
+      [currency.cc]: !prevCurrencies[currency.cc],
+    }));
+  };
 
   return (
     <Table className="max-w-[1000px]">
@@ -26,11 +29,13 @@ function TableComponent({ data }) {
         <Table.TextHeaderCell>Code</Table.TextHeaderCell>
         <Table.TextHeaderCell>Currency</Table.TextHeaderCell>
         <Table.TextHeaderCell>Rate</Table.TextHeaderCell>
-        <Table.TextHeaderCell>isSelected</Table.TextHeaderCell>
       </Table.Head>
       <Table.Body>
-        {tableData.map((currency, index) => (
-          <TableRowComponent key={index} currency={currency} sortSelected={sortSelected} setTableData={setTableData}></TableRowComponent>
+        {starredItems.map((currency, index) => (
+          <TableRowComponent key={index} currency={currency} onToggleSelect={() => toggleSelect(currency)}></TableRowComponent>
+        ))}
+        {unstarredItems.map((currency, index) => (
+          <TableRowComponent key={index} currency={currency} onToggleSelect={() => toggleSelect(currency)}></TableRowComponent>
         ))}
       </Table.Body>
     </Table>
