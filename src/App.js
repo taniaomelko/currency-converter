@@ -24,33 +24,23 @@ function App() {
   const [baseCurrency, setbaseCurrency] = useState('UAH');
   const [convertedAmount, setConvertedAmount] = useState(0);
 
-  // const [currency, selectCurrency] = useState();
-
-
   const [selectedIndex, setSelectedIndex] = useState(1);
   const [tabs] = useState(['Converter', 'Currencies']);
 
+  const [error, setError] = useState(false);
+
   const convertCurrency = () => {
     if (amount.length) {
-      document.querySelector('.error').classList.add('opacity-0');
-
+      setError(false);
       const conversionRate = currency1Rate / currency2Rate || 0;
       const converted = amount * conversionRate;
-
-      console.log(
-        amount, currency1Rate, currency2Rate
-      );
+      
       setConvertedAmount(converted);
     } else {
-      document.querySelector('.error').classList.remove('opacity-0');
+      setError(true);
       setConvertedAmount(0);
     }
   };
-
-  // const selectCurrency = () => {
-  //   document.querySelector('.selected-icon').classList.toggle('fill-yellow-500');
-  //   console.log('selectCurrency');
-  // }
 
   useEffect(() => {
     async function prepareData() {
@@ -127,7 +117,7 @@ function App() {
                   </div>
   
                   <div>
-                    <small className="error opacity-0 text-red-500">enter a number</small>
+                    <small className={`text-red-500 ${error === true ? 'opacity-100' : 'opacity-0'}`}>enter a number</small>
                   </div>
   
                   <div>Converted Amount: {parseFloat(convertedAmount.toFixed(4))}</div>
