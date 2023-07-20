@@ -1,4 +1,3 @@
-import React from "react";
 import { Table } from 'evergreen-ui';
 import PropTypes from 'prop-types';
 
@@ -31,4 +30,5 @@ TableRowComponent.propTypes = {
     exchangedate: PropTypes.string,
     isSelected: PropTypes.bool,
   }).isRequired,
+  onToggleSelect: PropTypes.func.isRequired,
 };

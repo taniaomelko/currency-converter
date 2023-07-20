@@ -11,22 +11,56 @@ import BaseCurrencyComponent from "./components/BaseCurrencyComponent/BaseCurren
 
 function App() {
   const [data, setData] = useState([]);
-
   const [amount, setAmount] = useState('');
-  const [currency1, setCurrency1] = useState(0);
-  const [currency2, setCurrency2] = useState(0);
-  const [currency1Rate, setCurrency1Rate] = useState(0);
-  const [currency2Rate, setCurrency2Rate] = useState(0);
 
-  const [baseCurrency, setbaseCurrency] = useState('UAH');
+  const [currencies, setCurrencies] = useState({
+    currency1: {
+      value: 0,
+      rate: 0,
+    },
+    currency2: {
+      value: 0,
+      rate: 0,
+    },
+  });
+
+  const [baseCurrency, setBaseCurrency] = useState('UAH');
   const [convertedAmount, setConvertedAmount] = useState(0);
   const [error, setError] = useState(false);
 
   const [tabs] = useState(['Converter', 'Currencies']);
-  const [selectedIndex, setSelectedIndex] = useState(1);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
+  const updateBaseCurrency = (value) => {
+    setBaseCurrency(value);
+
+    const baseCurrencyRate = data.find((currency) => currency.cc === value).rate;
+    const updatedData = data.map((currency) => {
+      return {
+        ...currency, 
+        rate: currency.rate / baseCurrencyRate,
+      };
+    });
+
+    setData(updatedData);
+  }
+
+  const updateCurrencies = (value, rate, id) => {
+    setCurrencies((prevCurrencies) => ({
+      ...prevCurrencies,
+      [id]: {
+        ...prevCurrencies[id],
+        value: value,
+        rate: rate,
+      },
+    }));
+  }
 
   const convertCurrency = () => {
     if (amount.length) {
+      const currency1Rate = currencies.currency1.rate;
+      const currency2Rate = currencies.currency2.rate;
+
       const conversionRate = currency1Rate / currency2Rate || 0;
       const converted = amount * conversionRate;
       setConvertedAmount(converted);
@@ -40,18 +74,23 @@ function App() {
   useEffect(() => {
     async function prepareData() {
       const data = await getData();
-      const preparedData = data
-        .filter(currency => currency.cc !== 'RUB' && currency.cc !== 'BYN')
-        .sort((a, b) => a.cc.localeCompare(b.cc));
+      const uahCurrency = {
+        r030: 980,
+        txt: 'Гривня',
+        rate: 1,
+        cc: 'UAH',
+        exchangedate: '',
+      };
+      const preparedData = [
+        ...data.filter(currency => currency.cc !== 'RUB' && currency.cc !== 'BYN'),
+        uahCurrency,
+      ].sort((a, b) => a.cc.localeCompare(b.cc));
 
       setData(preparedData);
       console.log(preparedData);
 
-      setCurrency1(preparedData[0].cc);
-      setCurrency2(preparedData[0].cc);
-
-      setCurrency1Rate(preparedData[0].rate);
-      setCurrency2Rate(preparedData[0].rate);
+      updateCurrencies(preparedData[0].cc, preparedData[0].rate, 'currency1');
+      updateCurrencies(preparedData[0].cc, preparedData[0].rate, 'currency2');
     }
 
     prepareData();
@@ -87,27 +126,20 @@ function App() {
                   <>
                   <div className="flex flex-wrap items-center gap-[10px] w-fit">
                     <InputComponent amount={amount} setAmount={setAmount} />
-                    <SelectComponent 
-                      id="currency1" 
-                      data={data} 
-                      currency={currency1} 
-                      setCurrency={setCurrency1} 
-                      currencyRate={currency1Rate} 
-                      setCurrencyRate={setCurrency1Rate}
+                    <SelectComponent
+                      id="currency1"
+                      data={data}
+                      updateCurrencies={updateCurrencies}
                     />
                     in
-                    <SelectComponent 
-                      id="currency2" 
-                      data={data} 
-                      currency={currency2} 
-                      setCurrency={setCurrency2} 
-                      currencyRate={currency2Rate} 
-                      setCurrencyRate={setCurrency2Rate}
+                    <SelectComponent
+                      id="currency2"
+                      data={data}
+                      updateCurrencies={updateCurrencies}
                     />
   
-                    <ButtonComponent 
-                      convertCurrency={convertCurrency} 
-                      amount={amount} setAmount={setAmount}
+                    <ButtonComponent
+                      convertCurrency={convertCurrency}
                     />
                   </div>
   
@@ -123,10 +155,8 @@ function App() {
                   <>
                     <BaseCurrencyComponent 
                       data={data} 
-                      setData={setData}
                       baseCurrency={baseCurrency} 
-                      setBaseCurrency={setbaseCurrency}
-                      className="mb-[20px]"
+                      updateBaseCurrency={updateBaseCurrency}
                     />
                     <TableComponent data={data} />
                   </>

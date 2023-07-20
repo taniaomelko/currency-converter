@@ -1,13 +1,7 @@
 import { Select } from 'evergreen-ui';
 import PropTypes from 'prop-types';
 
-function BaseCurrencyComponent({ data, setData, baseCurrency, setBaseCurrency }) {
-
-  if (!data.some((currency) => currency.cc === 'UAH')) {
-    data.push(
-      { r030: 980, txt: 'Гривня', rate: 1, cc: 'UAH', exchangedate: '' },
-    );
-  }
+function BaseCurrencyComponent({ data, baseCurrency, updateBaseCurrency }) {
 
   return (
     <div className="mb-[20px]">
@@ -18,23 +12,7 @@ function BaseCurrencyComponent({ data, setData, baseCurrency, setBaseCurrency })
       <Select
         value={baseCurrency}
         onChange={(e) => {
-          const selectedCurrency = e.target.value;
-          setBaseCurrency(selectedCurrency);
-
-          function changeTableData() {
-            const baseCurrencyRate = data.find((currency) => currency.cc === selectedCurrency).rate;
-
-            const updatedData = data.map((currency) => {
-              return {
-                ...currency, 
-                rate: currency.rate / baseCurrencyRate,
-              };
-            });
-
-            setData(updatedData);
-          }
-
-          changeTableData();
+          updateBaseCurrency(e.target.value);
         }}
       >
         {data.map((currency, index) => (
@@ -57,6 +35,7 @@ BaseCurrencyComponent.propTypes = {
     })
   ).isRequired,
   baseCurrency: PropTypes.string.isRequired,
+  updateBaseCurrency: PropTypes.func.isRequired,
 };
 
 export default BaseCurrencyComponent;

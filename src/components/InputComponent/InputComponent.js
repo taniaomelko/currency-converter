@@ -18,4 +18,5 @@ export default InputComponent;
 
 InputComponent.propTypes = {
   amount: PropTypes.string.isRequired,
+  setAmount: PropTypes.func.isRequired,
 };

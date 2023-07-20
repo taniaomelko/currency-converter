@@ -1,17 +1,14 @@
 import PropTypes from 'prop-types';
 import { Select } from 'evergreen-ui';
 
-function SelectComponent({ id, data, currency, setCurrency, setCurrencyRate }) {
+function SelectComponent({ id, data, updateCurrencies }) {
   return (
     <Select
       id={id}
-      value={currency}
       onChange={(e) => {
-        const selectedCurrency = e.target.value;
-          setCurrency(selectedCurrency);
-
-          const currencyRate = data.find((item) => item.cc === selectedCurrency).rate;
-          setCurrencyRate(currencyRate);
+        const value = e.target.value;
+        const rate = data.find((item) => item.cc === value).rate;
+        updateCurrencies(value, rate, id);
       }}
     >
       {data.map((currency, index) => (
@@ -23,6 +20,16 @@ function SelectComponent({ id, data, currency, setCurrency, setCurrencyRate }) {
 
 SelectComponent.propTypes = PropTypes.shape({
   id: PropTypes.number.isRequired,
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      r030: PropTypes.number.isRequired,
+      txt: PropTypes.string.isRequired,
+      rate: PropTypes.number.isRequired,
+      cc: PropTypes.string.isRequired,
+      exchangedate: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  updateCurrencies: PropTypes.func.isRequired,
 }).isRequired;
 
 export default SelectComponent;
