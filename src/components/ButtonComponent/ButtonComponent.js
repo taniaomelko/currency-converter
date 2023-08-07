@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 function ButtonComponent({ convertCurrency }) {
   return (
-    <Button appearance="primary" onClick={convertCurrency}>Convert</Button>
+    <Button id="convert" appearance="primary" onClick={convertCurrency}>Convert</Button>
   );
 }
 

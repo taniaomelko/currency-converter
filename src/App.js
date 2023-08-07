@@ -108,6 +108,7 @@ function App() {
                 isSelected={index === selectedIndex}
                 key={tab}
                 onSelect={() => setSelectedIndex(index)}
+                id={`tab-${index}`}
               >
                 {tab}
               </Tab>
@@ -124,30 +125,35 @@ function App() {
               >
                 {index === 0 && (
                   <>
-                  <div className="flex flex-wrap items-center gap-[10px] w-fit">
-                    <InputComponent amount={amount} setAmount={setAmount} />
-                    <SelectComponent
-                      id="currency1"
-                      data={data}
-                      updateCurrencies={updateCurrencies}
-                    />
-                    in
-                    <SelectComponent
-                      id="currency2"
-                      data={data}
-                      updateCurrencies={updateCurrencies}
-                    />
-  
-                    <ButtonComponent
-                      convertCurrency={convertCurrency}
-                    />
-                  </div>
-  
-                  <div>
-                    <small className={`text-red-500 ${error === true ? 'opacity-100' : 'opacity-0'}`}>enter a number</small>
-                  </div>
-  
-                  <div>Converted Amount: {parseFloat(convertedAmount.toFixed(4))}</div>
+                    <div className="flex flex-wrap items-center gap-[10px] w-fit">
+                      <InputComponent amount={amount} setAmount={setAmount} />
+                      <SelectComponent
+                        id="currency1"
+                        data={data}
+                        updateCurrencies={updateCurrencies}
+                      />
+                      in
+                      <SelectComponent
+                        id="currency2"
+                        data={data}
+                        updateCurrencies={updateCurrencies}
+                      />
+    
+                      <ButtonComponent
+                        convertCurrency={convertCurrency}
+                      />
+                    </div>
+    
+                    <div>
+                      <small id="error" className={`text-red-500 ${error === true ? 'opacity-100' : 'opacity-0'}`}>enter a number</small>
+                    </div>
+    
+                    <div>
+                      Converted Amount:&nbsp;
+                      <span id="converted-amount">
+                        {parseFloat(convertedAmount.toFixed(4))}
+                      </span>
+                    </div>
                   </>
                 )}
 
