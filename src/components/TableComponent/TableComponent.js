@@ -31,11 +31,11 @@ function TableComponent({ data }) {
         <Table.TextHeaderCell>Rate</Table.TextHeaderCell>
       </Table.Head>
       <Table.Body>
-        {starredItems.map((currency, index) => (
-          <TableRowComponent key={index} currency={currency} onToggleSelect={() => toggleSelect(currency)}></TableRowComponent>
+        {starredItems.map(currency => (
+          <TableRowComponent key={currency.cc} currency={currency} onToggleSelect={() => toggleSelect(currency)}></TableRowComponent>
         ))}
-        {unstarredItems.map((currency, index) => (
-          <TableRowComponent key={index} currency={currency} onToggleSelect={() => toggleSelect(currency)}></TableRowComponent>
+        {unstarredItems.map(currency => (
+          <TableRowComponent key={currency.cc} currency={currency} onToggleSelect={() => toggleSelect(currency)}></TableRowComponent>
         ))}
       </Table.Body>
     </Table>
