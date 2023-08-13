@@ -13,16 +13,7 @@ function App() {
   const [data, setData] = useState([]);
   const [amount, setAmount] = useState('');
 
-  const [currencies, setCurrencies] = useState({
-    currency1: {
-      value: 0,
-      rate: 0,
-    },
-    currency2: {
-      value: 0,
-      rate: 0,
-    },
-  });
+  const [currencies, setCurrencies] = useState({});
 
   const [baseCurrency, setBaseCurrency] = useState('UAH');
   const [convertedAmount, setConvertedAmount] = useState(0);
