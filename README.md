@@ -1,4 +1,4 @@
-# Demo: https://currency-converter-eta-rose.vercel.app/
+Demo: https://currency-converter-eta-rose.vercel.app/
 
 ## Available Scripts
 
